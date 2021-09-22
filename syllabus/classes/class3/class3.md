@@ -68,7 +68,19 @@ print(token.is_digit)
 You might also find a couple of other interesting things in there especially the `lemma_` which denotes the lemma of the token, `pos_` which denotes part-of-speech tag of the token and `ent_type_` which denote the entity type of the token.
 
 **Exercise 1**:
-Inspect the `doc`-object using `dir` and `type` along with the [documentation](https://spacy.io/api/Doc). You should before class have though i) about what is intended use (or benefit) of the `doc`-object ii) What are the two ways in which I can create an `Doc` object?
+Inspect the `doc`-object using `dir` and `type` along with the [documentation](https://spacy.io/api/Doc). You should before class have though i) about what is intended use (or benefit) of the `doc`-object 
+
+ii) What are the two ways in which I can create an `Doc` object?
+###From spacy documentation###
+# Construction 1
+doc = nlp("Some text")
+
+# Construction 2
+from spacy.tokens import Doc
+
+words = ["hello", "world", "!"]
+spaces = [True, False, False]
+doc = Doc(nlp.vocab, words=words, spaces=spaces)
 
 We will talk about this exercise as the first thing in the class.
 
