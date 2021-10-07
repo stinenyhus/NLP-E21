@@ -23,7 +23,7 @@ For this class we will be using the dataset, SST2. The stanford sentiment treeba
 
 ```
 pip install datasets
-```
+``` 
 
 > If interested know that you find of bunch of datasets using this package. To see all available check out their [dataset hub](https://huggingface.co/datasets).
 
