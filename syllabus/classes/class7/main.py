@@ -1,7 +1,12 @@
-from typing import List
+import numpy as np
+import torch
+
 from datasets import load_dataset
 import gensim.downloader as api
 
+from util import batch
+from LSTM import RNN
+from embedding import gensim_to_torch_embedding
 
 # DATASET
 dataset = load_dataset("conllpp")
@@ -14,18 +19,20 @@ classes = train.features["ner_tags"].feature
 
 
 # CONVERTING EMBEDDINGS
-import numpy as np
-
-import torch
-
 model = api.load("glove-wiki-gigaword-50")
-
-from embedding import gensim_to_torch_embedding
 
 # convert gensim word embedding to torch word embedding
 embedding_layer, vocab = gensim_to_torch_embedding(model)
 
 # PREPARING A BATCH
+
+# shuffle dataset
+shuffled_train = dataset["train"].shuffle(seed=1)
+
+# batch it using a utility function (don't spend time on the function, but make sure you understand the output)
+batch_size = 10
+batches_tokens = batch(shuffled_train["tokens"], batch_size)
+batches_tags = batch(shuffled_train["ner_tags"], batch_size)
 
 
 def tokens_to_idx(tokens: List[str], vocab:dict=model.key_to_index):
@@ -62,13 +69,11 @@ for i in range(batch_size):
     batch_labels[i][:size] = tags
 
 
-# since all data are indices, we convert them to torch LongTensors
+# since all data are indices, we convert them to torch LongTensors (integers)
 batch_input, batch_labels = torch.LongTensor(batch_input), torch.LongTensor(
     batch_labels) #Long tensors are integers - so it is because we work with integers
 
 # CREATE MODEL
-from LSTM import RNN
-
 model = RNN(
     embedding_layer=embedding_layer, output_dim=num_classes + 1, hidden_dim_size=256
 )
